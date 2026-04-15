@@ -1,301 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>0xRushi</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --pur: #b06fff;
-      --pur-dim: #7c3fcf;
-      --bg: #08080e;
-      --term-bg: rgba(8,8,16,0.96);
-      --text: #ddd8f5;
-      --text-dim: #6b6880;
-      --green: #7fff9e;
-      --cyan: #7fd4ff;
-      --yellow: #ffe080;
-      --border: rgba(150,80,255,0.2);
+      --p1: #c084fc;
+      --p2: #a855f7;
+      --p3: #7c3aed;
+      --p4: #4c1d95;
+      --bg: #05050d;
+      --bg2: #0a0a18;
+      --surface: rgba(12,10,28,0.95);
+      --text: #ede9fe;
+      --muted: #6d6585;
+      --subtle: #2d2640;
+      --green: #86efac;
+      --cyan: #67e8f9;
+      --amber: #fcd34d;
+      --border: rgba(168,85,247,0.15);
+      --border-h: rgba(168,85,247,0.45);
     }
 
-    html, body {
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'JetBrains Mono', monospace;
-      overflow-x: hidden;
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', monospace; overflow-x: hidden; }
+
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 998; opacity: 0.5;
     }
 
+    /* Scanlines */
     body::before {
       content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px);
+      pointer-events: none; z-index: 997;
+    }
+
+    /* Ambient orbs */
+    .orb {
       position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px,
-        rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px
-      );
+      border-radius: 50%;
       pointer-events: none;
-      z-index: 999;
-    }
-
-    .topbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--pur), #d4a0ff, var(--pur-dim), transparent);
-      z-index: 100;
-      box-shadow: 0 0 22px 5px rgba(150,60,255,0.5);
-    }
-
-    .statusbar {
-      position: fixed;
-      top: 2px; left: 0; right: 0;
-      padding: 5px 20px;
-      font-size: 10.5px;
-      color: var(--text-dim);
-      background: rgba(8,8,16,0.97);
-      border-bottom: 1px solid rgba(150,80,255,0.1);
-      display: flex;
-      gap: 24px;
-      z-index: 99;
-      font-family: 'Share Tech Mono', monospace;
-    }
-    .statusbar .hi { color: var(--pur); }
-
-    .glow-bg {
-      position: fixed;
-      top: 25%; left: 50%;
-      transform: translateX(-50%);
-      width: 700px; height: 300px;
-      background: radial-gradient(ellipse, rgba(110,40,200,0.1) 0%, transparent 70%);
-      pointer-events: none;
+      filter: blur(80px);
       z-index: 0;
-      filter: blur(60px);
+    }
+    .orb1 {
+      width: 500px; height: 500px;
+      top: -150px; left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(124,58,237,0.12), transparent 70%);
+    }
+    .orb2 {
+      width: 300px; height: 300px;
+      bottom: 10%; right: 5%;
+      background: radial-gradient(circle, rgba(168,85,247,0.07), transparent 70%);
+    }
+    .orb3 {
+      width: 200px; height: 200px;
+      bottom: 20%; left: 5%;
+      background: radial-gradient(circle, rgba(103,232,249,0.04), transparent 70%);
     }
 
-    .cursor-line {
-      position: fixed;
-      left: 16px; top: 0; bottom: 0;
-      width: 1px;
-      background: linear-gradient(180deg, transparent, var(--pur-dim), transparent);
-      opacity: 0.25;
-      animation: pulse 4s ease-in-out infinite;
+    /* Top accent */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--p3) 20%, var(--p1) 50%, var(--p3) 80%, transparent 100%);
+      z-index: 100;
+      box-shadow: 0 0 30px 2px rgba(168,85,247,0.4);
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 0.08; }
-      50% { opacity: 0.35; }
+    /* Status bar */
+    .statusbar {
+      position: fixed; top: 1px; left: 0; right: 0;
+      padding: 5px 24px;
+      font-size: 10px; letter-spacing: 0.08em;
+      color: var(--muted);
+      background: rgba(5,5,13,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(168,85,247,0.08);
+      display: flex; gap: 20px; align-items: center;
+      z-index: 99;
     }
+    .statusbar .dot-online {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: breathe 2.5s ease-in-out infinite;
+    }
+    @keyframes breathe { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .statusbar .hi { color: var(--p1); }
 
+    /* Main */
     .container {
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 70px 20px 40px;
-      gap: 28px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 60px 20px 50px;
+      gap: 24px;
     }
 
+    /* Name header */
+    .hero-name {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 0%, var(--p1) 50%, var(--p2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeDown 0.6s cubic-bezier(.22,1,.36,1) both;
+      text-align: center;
+    }
+    @keyframes fadeDown {
+      from { opacity:0; transform: translateY(-16px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    /* Terminal */
     .terminal {
-      width: 100%;
-      max-width: 580px;
-      background: var(--term-bg);
-      border: 1px solid rgba(150,80,255,0.22);
-      border-radius: 6px;
+      width: 100%; max-width: 600px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
       box-shadow:
-        0 0 0 1px rgba(150,80,255,0.05),
-        0 0 50px rgba(100,40,200,0.18),
-        0 24px 80px rgba(0,0,0,0.9);
+        0 0 0 1px rgba(168,85,247,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        0 0 60px rgba(124,58,237,0.15),
+        0 32px 100px rgba(0,0,0,0.95);
       overflow: hidden;
-      animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) both;
+      animation: fadeUp 0.65s 0.1s cubic-bezier(.22,1,.36,1) both;
     }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform: translateY(28px); }
+      to   { opacity:1; transform: translateY(0); }
     }
 
     .terminal-bar {
-      background: #0e0e1c;
-      padding: 9px 14px;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      border-bottom: 1px solid rgba(150,80,255,0.12);
+      background: linear-gradient(180deg, #12101f, #0e0c1c);
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid rgba(168,85,247,0.1);
     }
 
-    .dot { width: 11px; height: 11px; border-radius: 50%; }
-    .dot.r { background: #ff5f57; }
-    .dot.y { background: #febc2e; }
-    .dot.g { background: #28c840; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.r { background: #ff5f57; box-shadow: 0 0 6px rgba(255,95,87,0.5); }
+    .dot.y { background: #febc2e; box-shadow: 0 0 6px rgba(254,188,46,0.4); }
+    .dot.g { background: #28c840; box-shadow: 0 0 6px rgba(40,200,64,0.4); }
 
     .terminal-title {
-      flex: 1;
-      text-align: center;
-      font-size: 10.5px;
-      color: var(--text-dim);
-      font-family: 'Share Tech Mono', monospace;
+      flex: 1; text-align: center;
+      font-size: 10px; color: var(--muted);
+      letter-spacing: 0.06em;
     }
 
     .terminal-body {
-      padding: 18px 22px 22px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 13px;
-      line-height: 1.8;
+      padding: 20px 24px 24px;
+      font-size: 12.5px; line-height: 1.85;
+      min-height: 180px;
     }
 
-    .pu  { color: var(--pur); }
-    .dim { color: var(--text-dim); }
+    /* Colors */
+    .pu  { color: var(--p1); }
+    .pu2 { color: var(--p2); }
+    .dim { color: var(--muted); }
     .cy  { color: var(--cyan); }
     .gr  { color: var(--green); }
     .wh  { color: var(--text); }
-    .ye  { color: var(--yellow); }
+    .am  { color: var(--amber); }
 
-    .prompt-line { display: flex; align-items: center; flex-wrap: wrap; }
+    .prompt-prefix { color: var(--p1); margin-right: 4px; }
 
-    .blink-cursor {
+    /* Typing cursor */
+    .type-cursor {
       display: inline-block;
-      width: 7px; height: 14px;
-      background: var(--pur);
-      margin-left: 2px;
+      width: 7px; height: 13px;
+      background: var(--p1);
+      margin-left: 1px;
       vertical-align: middle;
-      animation: blink 1.2s step-end infinite;
-      box-shadow: 0 0 8px var(--pur);
+      animation: blink 1s step-end infinite;
+      box-shadow: 0 0 10px rgba(192,132,252,0.8);
+      border-radius: 1px;
     }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-    .tagline {
-      font-size: 10.5px;
-      letter-spacing: 0.28em;
-      color: var(--text-dim);
-      text-align: center;
-      animation: fadeUp 0.7s 0.15s cubic-bezier(.22,1,.36,1) both;
+    /* Output lines — hidden initially, revealed by JS */
+    .out-line { opacity: 0; transition: opacity 0.1s; }
+    .out-line.visible { opacity: 1; }
+
+    /* Divider */
+    .divider {
+      width: 100%; max-width: 600px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--subtle), transparent);
+      animation: fadeUp 0.65s 0.25s cubic-bezier(.22,1,.36,1) both;
     }
-    .tagline .hi { color: var(--pur); }
 
+    /* Links */
     .links {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 9px;
-      width: 100%;
-      max-width: 580px;
-      animation: fadeUp 0.7s 0.28s cubic-bezier(.22,1,.36,1) both;
+      gap: 8px;
+      width: 100%; max-width: 600px;
+      animation: fadeUp 0.65s 0.3s cubic-bezier(.22,1,.36,1) both;
     }
 
     .link-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 17px;
-      background: rgba(150,80,255,0.03);
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 16px;
+      background: rgba(168,85,247,0.03);
       border: 1px solid var(--border);
-      border-radius: 4px;
+      border-radius: 6px;
       text-decoration: none;
-      color: var(--text-dim);
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 11.5px;
-      letter-spacing: 0.12em;
+      color: var(--muted);
+      font-size: 11px; letter-spacing: 0.1em;
       text-transform: uppercase;
-      transition: all 0.18s ease;
-      position: relative;
-      overflow: hidden;
+      transition: all 0.15s ease;
+      position: relative; overflow: hidden;
+    }
+
+    .link-item::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(168,85,247,0.06), transparent);
+      opacity: 0; transition: opacity 0.15s;
     }
 
     .link-item::after {
       content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
+      position: absolute; left: 0; top: 0; bottom: 0;
       width: 2px;
-      background: var(--pur);
-      opacity: 0;
-      transition: opacity 0.18s;
-      box-shadow: 0 0 8px var(--pur);
+      background: linear-gradient(180deg, var(--p1), var(--p2));
+      opacity: 0; transition: opacity 0.15s;
+      box-shadow: 0 0 10px var(--p2);
     }
 
     .link-item:hover {
-      border-color: rgba(150,80,255,0.5);
+      border-color: var(--border-h);
       color: var(--text);
-      background: rgba(150,80,255,0.07);
-      box-shadow: 0 0 20px rgba(120,50,220,0.12);
+      box-shadow: 0 0 24px rgba(124,58,237,0.12), inset 0 1px 0 rgba(255,255,255,0.04);
+      transform: translateY(-1px);
     }
-    .link-item:hover::after { opacity: 1; }
+    .link-item:hover::before { opacity: 1; }
+    .link-item:hover::after  { opacity: 1; }
 
     .link-item svg {
-      width: 14px; height: 14px;
-      flex-shrink: 0;
-      opacity: 0.45;
-      transition: opacity 0.18s;
+      width: 13px; height: 13px;
+      flex-shrink: 0; opacity: 0.4;
+      transition: opacity 0.15s;
     }
-    .link-item:hover svg { opacity: 0.9; }
+    .link-item:hover svg { opacity: 1; }
 
+    /* Footer */
     .footer {
-      font-size: 10px;
-      color: rgba(180,160,255,0.1);
-      letter-spacing: 0.18em;
-      font-family: 'Share Tech Mono', monospace;
-      animation: fadeUp 0.7s 0.42s cubic-bezier(.22,1,.36,1) both;
+      font-size: 9.5px; letter-spacing: 0.2em;
+      color: rgba(168,85,247,0.15);
+      animation: fadeUp 0.65s 0.45s cubic-bezier(.22,1,.36,1) both;
     }
 
-    @media (max-width: 480px) {
-      .terminal-body { font-size: 11.5px; padding: 14px 16px; }
+    @media (max-width: 500px) {
+      .terminal-body { font-size: 11.5px; padding: 16px 18px; }
       .links { grid-template-columns: 1fr; }
-      .statusbar { font-size: 9px; gap: 12px; }
+      .hero-name { font-size: 26px; }
     }
   </style>
 </head>
 <body>
 
 <div class="topbar"></div>
-<div class="cursor-line"></div>
-<div class="glow-bg"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
 
 <div class="statusbar">
-  <span class="hi">● ONLINE</span>
-  <span>USER=0xrushi</span>
-  <span>SHELL=zsh</span>
-  <span>OS=arch-btw</span>
-  <span style="margin-left:auto">0xrushi.xyz</span>
+  <div class="dot-online"></div>
+  <span class="hi">0xrushi.xyz</span>
+  <span>·</span>
+  <span>arch-btw</span>
+  <span>·</span>
+  <span>zsh 5.9</span>
+  <span style="margin-left:auto; color: rgba(168,85,247,0.3)">[ secured by cloudflare ]</span>
 </div>
 
 <div class="container">
+
+  <div class="hero-name">0xRushi</div>
 
   <div class="terminal">
     <div class="terminal-bar">
       <div class="dot r"></div>
       <div class="dot y"></div>
       <div class="dot g"></div>
-      <div class="terminal-title">zsh · 0xrushi@arch-btw · ~</div>
+      <div class="terminal-title">zsh  ·  ~  ·  0xrushi@arch-btw</div>
     </div>
-    <div class="terminal-body">
-
-      <div class="prompt-line">
-        <span class="pu">╭─[</span><span class="cy">0xRushi</span><span class="dim">@</span><span class="pu">arch-btw</span><span class="pu">]</span><span class="dim">──[</span><span class="dim">~</span><span class="dim">]</span>
-      </div>
-      <div class="prompt-line" style="margin-bottom:12px">
-        <span class="pu">╰─❯ </span><span class="wh">cat about.txt</span>
-      </div>
-
-      <div style="margin-bottom:5px"><span class="dim">name    </span><span class="pu">▸ </span><span class="wh">Rushikesh Nerkar</span></div>
-      <div style="margin-bottom:5px"><span class="dim">alias   </span><span class="pu">▸ </span><span class="cy">0xRushi</span></div>
-      <div style="margin-bottom:5px"><span class="dim">focus   </span><span class="pu">▸ </span><span class="wh">offensive sec · bug bounty · Cloud Security</span></div>
-      <div style="margin-bottom:14px"><span class="dim">status  </span><span class="pu">▸ </span><span class="gr">actively pwning</span></div>
-
-      <div class="prompt-line">
-        <span class="pu">╰─❯ </span><span class="blink-cursor"></span>
-      </div>
-
+    <div class="terminal-body" id="term">
+      <!-- filled by JS -->
     </div>
   </div>
 
-  <div class="tagline">
-    <span class="hi">//</span> exploit curiosity · patch ignorance <span class="hi">//</span>
-  </div>
+  <div class="divider"></div>
 
   <div class="links">
     <a class="link-item" href="https://github.com/RushikeshNerkar820" target="_blank">
@@ -314,7 +327,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       TryHackMe
     </a>
-    <a class="link-item" href="mailto:Rushinerkar1@gmail.com">
+    <a class="link-item" href="mailto:Rushinerkar1@gmail.com" style="grid-column: span 2;">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       Contact
     </a>
@@ -323,6 +336,81 @@
   <div class="footer">© 2026 · 0xRushi · all shells reserved</div>
 
 </div>
+
+<script>
+  const term = document.getElementById('term');
+
+  // Color helpers
+  const pu  = s => `<span class="pu">${s}</span>`;
+  const cy  = s => `<span class="cy">${s}</span>`;
+  const gr  = s => `<span class="gr">${s}</span>`;
+  const am  = s => `<span class="am">${s}</span>`;
+  const wh  = s => `<span class="wh">${s}</span>`;
+  const dim = s => `<span class="dim">${s}</span>`;
+
+  const PROMPT = `${pu('╭─[')}${cy('0xRushi')}${dim('@')}${pu('arch-btw')}${pu(']')}${dim('──[~]')}<br>${pu('╰─❯')} `;
+  const CURSOR = `<span class="type-cursor"></span>`;
+
+  // Sequence: [type: 'cmd'|'out'|'gap', content, delay_before_ms]
+  const sequence = [
+    { type: 'cmd',  text: 'cat about.txt',  speed: 60 },
+    { type: 'out',  html: `${dim('name    ')}${pu('▸ ')}${wh('Rushikesh Nerkar')}`,        delay: 120 },
+    { type: 'out',  html: `${dim('alias   ')}${pu('▸ ')}${cy('0xRushi')}`,                 delay: 80  },
+    { type: 'out',  html: `${dim('focus   ')}${pu('▸ ')}${wh('offensive sec · bug bounty · CTF')}`, delay: 80 },
+    { type: 'out',  html: `${dim('rank    ')}${pu('▸ ')}${am('HTB Pro Hacker')}`,          delay: 80  },
+    { type: 'out',  html: `${dim('status  ')}${pu('▸ ')}${gr('actively pwning')}`,         delay: 80  },
+    { type: 'gap',  delay: 200 },
+    { type: 'idle' },
+  ];
+
+  let html = '';
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  async function run() {
+    await sleep(600); // initial pause
+
+    for (const step of sequence) {
+      if (step.type === 'cmd') {
+        // Show prompt + typing animation
+        html += `<div class="out-line visible" id="cmdline">${PROMPT}${CURSOR}</div>`;
+        term.innerHTML = html;
+        const cmdLine = document.getElementById('cmdline');
+
+        let typed = '';
+        for (const ch of step.text) {
+          await sleep(step.speed + Math.random() * 30);
+          typed += ch;
+          cmdLine.innerHTML = `${PROMPT}${wh(typed)}${CURSOR}`;
+        }
+        // Remove cursor from cmd line, finalize
+        cmdLine.innerHTML = `${PROMPT}${wh(step.text)}`;
+        cmdLine.removeAttribute('id');
+        await sleep(180);
+
+      } else if (step.type === 'out') {
+        await sleep(step.delay);
+        html = term.innerHTML;
+        html += `<div class="out-line" id="newline">${step.html}</div>`;
+        term.innerHTML = html;
+        await sleep(20);
+        document.getElementById('newline').classList.add('visible');
+        document.getElementById('newline').removeAttribute('id');
+
+      } else if (step.type === 'gap') {
+        await sleep(step.delay);
+
+      } else if (step.type === 'idle') {
+        // Final prompt with blinking cursor
+        html = term.innerHTML;
+        html += `<div class="out-line visible"><br>${PROMPT}${CURSOR}</div>`;
+        term.innerHTML = html;
+      }
+    }
+  }
+
+  run();
+</script>
 
 </body>
 </html>

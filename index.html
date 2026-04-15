@@ -351,13 +351,12 @@
   const PROMPT = `${pu('╭─[')}${cy('0xRushi')}${dim('@')}${pu('arch-btw')}${pu(']')}${dim('──[~]')}<br>${pu('╰─❯')} `;
   const CURSOR = `<span class="type-cursor"></span>`;
 
-  // Sequence: [type: 'cmd'|'out'|'gap', content, delay_before_ms]
+  
   const sequence = [
     { type: 'cmd',  text: 'cat about.txt',  speed: 60 },
     { type: 'out',  html: `${dim('name    ')}${pu('▸ ')}${wh('Rushikesh Nerkar')}`,        delay: 120 },
     { type: 'out',  html: `${dim('alias   ')}${pu('▸ ')}${cy('0xRushi')}`,                 delay: 80  },
-    { type: 'out',  html: `${dim('focus   ')}${pu('▸ ')}${wh('offensive sec · bug bounty · CTF')}`, delay: 80 },
-    { type: 'out',  html: `${dim('rank    ')}${pu('▸ ')}${am('HTB Pro Hacker')}`,          delay: 80  },
+    { type: 'out',  html: `${dim('focus   ')}${pu('▸ ')}${wh('offensive sec · bug bounty · Cloud Security')}`, delay: 80 },
     { type: 'out',  html: `${dim('status  ')}${pu('▸ ')}${gr('actively pwning')}`,         delay: 80  },
     { type: 'gap',  delay: 200 },
     { type: 'idle' },
